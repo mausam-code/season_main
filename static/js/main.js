@@ -90,24 +90,50 @@ class ClockSystem {
 // Initialize clock when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     new ClockSystem();
+    initializeInteractivity();
 });
 
-// Add hover effects to project cards
-document.querySelectorAll('.project-card').forEach(card => {
-    card.addEventListener('mouseenter', () => {
-        card.style.transform = 'translateY(-10px) scale(1.02)';
+function initializeInteractivity() {
+    // Add hover effects to project cards
+    document.querySelectorAll('.project-card').forEach(card => {
+        card.addEventListener('mouseenter', () => {
+            card.style.transform = 'translateY(-10px) scale(1.02)';
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'translateY(0) scale(1)';
+        });
     });
-    
-    card.addEventListener('mouseleave', () => {
-        card.style.transform = 'translateY(0) scale(1)';
-    });
-});
 
-// Add button click effects
-document.querySelectorAll('.btn').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        if (btn.textContent === 'Preview') {
+    // Open preview modal
+    document.querySelectorAll('.btn-primary').forEach(btn => {
+        btn.addEventListener('click', e => {
             e.preventDefault();
+            const url = btn.getAttribute('href');
+            const modal = document.getElementById('previewModal');
+            const content = document.getElementById('previewContent');
+            
+            if (modal && content) {
+                content.innerHTML = `<iframe src="${url}" style="width:100%;height:70vh;border:none;"></iframe>`;
+                modal.style.display = 'flex';
+            }
+        });
+    });
+
+    // Close preview modal
+    const closeBtn = document.getElementById('closePreview');
+    if (closeBtn) {
+        closeBtn.addEventListener('click', () => {
+            const modal = document.getElementById('previewModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        });
+    }
+
+    // Add ripple effect to buttons
+    document.querySelectorAll('.btn').forEach(btn => {
+        btn.addEventListener('click', e => {
             // Create ripple effect
             const ripple = document.createElement('span');
             const rect = btn.getBoundingClientRect();
@@ -131,20 +157,43 @@ document.querySelectorAll('.btn').forEach(btn => {
             btn.appendChild(ripple);
             
             setTimeout(() => {
-                ripple.remove();
+                if (ripple.parentNode) {
+                    ripple.remove();
+                }
             }, 600);
-        }
+        });
     });
+
+    // Add ripple keyframes dynamically if not already added
+    if (!document.querySelector('#ripple-keyframes')) {
+        const style = document.createElement('style');
+        style.id = 'ripple-keyframes';
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(2);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+}
+
+// Close modal when clicking outside of it
+document.addEventListener('click', (e) => {
+    const modal = document.getElementById('previewModal');
+    if (modal && e.target === modal) {
+        modal.style.display = 'none';
+    }
 });
 
-// Add ripple animation keyframes
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes ripple {
-        to {
-            transform: scale(2);
-            opacity: 0;
+// Handle escape key to close modal
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        const modal = document.getElementById('previewModal');
+        if (modal && modal.style.display === 'flex') {
+            modal.style.display = 'none';
         }
     }
-`;
-document.head.appendChild(style);
+});

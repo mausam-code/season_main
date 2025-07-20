@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Season Singh Rajak - Portfolio</title>
+    <title>Season</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
@@ -18,13 +18,9 @@
             <div class="analog-clock">
                 <div class="clock-numbers">
                     <span class="number">12</span>
-                    <span class="number">1</span>
                     <span class="number">3</span>
-                    <span class="number">4</span>
                     <span class="number">6</span>
-                    <span class="number">7</span>
                     <span class="number">9</span>
-                    <span class="number">10</span>
                 </div>
                 <div class="clock-center"></div>
                 <div class="hand hour-hand" id="hourHand"></div>
@@ -39,7 +35,7 @@
     <!-- Main Content -->
     <div class="content">
         <h1>Season Singh Rajak</h1>
-        <p>Entrepreneur & Time Artist</p>
+        <p>Entrepreneur & Artist</p>
         <p>Welcome to my digital space where time meets creativity. Every second counts, every moment matters.</p>
     </div>
 
@@ -61,7 +57,7 @@
                     {% endfor %}
                 </div>
                 <div class="project-actions">
-                    <a href="{{ project.demo_url }}" target="_blank" class="btn btn-primary">Preview</a>
+                    <a href="{{ project.demo_url }}" class="btn btn-primary">Preview</a>
                     <a href="{{ project.github_url }}" target="_blank" class="btn btn-secondary">GitHub</a>
                 </div>
             </div>
@@ -69,6 +65,14 @@
         </div>
     </section>
 
-    <script src = "{{ url_for('static', filename='js/main.js') }}"></script>
+    <!-- Preview Modal -->
+    <div id="previewModal">
+        <div class="modal-content">
+            <button id="closePreview">×</button>
+            <div id="previewContent">Loading preview...</div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html>
